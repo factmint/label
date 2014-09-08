@@ -1,0 +1,22 @@
+{
+  "name": "Label",
+  "version": "0.1.0",
+  "authors": [
+    "Benjamin Brown <ben.brown@factmint.com>"
+  ],
+  "description": "Factmint label design for use in visualizations, implemented using Snap.svg",
+  "main": "dist/label.js",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "homepage": "http://factmint.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
