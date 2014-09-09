@@ -81,6 +81,8 @@ function(Snap) {
 			arrowPoints.setPoint1(x, y);
 
 			var mainBoxPoints;
+			var secondaryBoxPoints;
+			var boxToGroupWith;
 
 			var secondaryBoxExists = true;
 
