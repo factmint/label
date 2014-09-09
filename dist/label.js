@@ -1,4 +1,5 @@
-define(function() {
+define(['snap'],
+function(Snap) {
 	return Snap.plugin(function(Snap, Element, Paper) {
 		var BORDER_RADIUS = 5;
 
