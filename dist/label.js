@@ -1,14 +1,6 @@
-define(['snap'],
-function(Snap) {
+define(['snap', 'config'],
+function(Snap,   Config) {
 	return Snap.plugin(function(Snap, Element, Paper) {
-		var BORDER_RADIUS = 5;
-
-		var ARROW_LENGTH = 10;
-		var ARROW_WIDTH = 9;
-
-		var PADDING = 10;
-		var FONT_SIZE = 10;
-
 		var BOX_PATH = "M {x1} {y1}L{x2} {y2}A{borderRadius} {borderRadius} 0 0 {sweep} {x3} {y3}L {x4} {y4} A{borderRadius} {borderRadius} 0 0 {sweep} {x5} {y5}L {x6} {y6}Z";
 
 		var ArrowModel = function() {
@@ -45,7 +37,7 @@ function(Snap) {
 
 			var inside = (outsideEdge == "left") ? left + width : left;
 			var outside = (outsideEdge == "left") ? left : left + width;
-			var outsideMinusRadius = (outsideEdge == "left") ? left + BORDER_RADIUS : left + width - BORDER_RADIUS;
+			var outsideMinusRadius = (outsideEdge == "left") ? left + Config.LABEL_BORDER_RADIUS : left + width - Config.LABEL_BORDER_RADIUS;
 
 			this.bottomInsideX = inside;
 			this.bottomInsideY = bottom;
@@ -54,10 +46,10 @@ function(Snap) {
 			this.bottomCurveStartY = bottom;
 
 			this.bottomCurveEndX = outside;
-			this.bottomCurveEndY = bottom - BORDER_RADIUS;
+			this.bottomCurveEndY = bottom - Config.LABEL_BORDER_RADIUS;
 
 			this.topCurveStartX = outside;
-			this.topCurveStartY = bottom - height + BORDER_RADIUS;
+			this.topCurveStartY = bottom - height + Config.LABEL_BORDER_RADIUS;
 
 			this.topCurveEndX = outsideMinusRadius;
 			this.topCurveEndY = bottom - height;
@@ -74,8 +66,6 @@ function(Snap) {
 			var arrowElement;
 			var mainBoxElement;
 			var secondaryBoxElement;
-
-			var fontFamily = "'Lato', sans-serif";
 
 			var arrowPoints = new ArrowModel();
 			arrowPoints.setPoint1(x, y);
@@ -106,70 +96,70 @@ function(Snap) {
 				secondaryBoxExists = false;
 
 				arrowPoints.setPoint2(
-					x + ARROW_WIDTH / 2,
-					y - ARROW_LENGTH
+					x + Config.LABEL_ARROW_WIDTH / 2,
+					y - Config.LABEL_ARROW_LENGTH
 				);
 
 				arrowPoints.setPoint3(
-					x - ARROW_WIDTH / 2,
-	                y - ARROW_LENGTH
+					x - Config.LABEL_ARROW_WIDTH / 2,
+	                y - Config.LABEL_ARROW_LENGTH
 				);
 
-				mainTextElement = this.text(x, y + FONT_SIZE / 2 - ARROW_LENGTH - PADDING * 2 + 1, text)
+				mainTextElement = this.text(x, y + Config.LABEL_FONT_SIZE / 2 - Config.LABEL_ARROW_LENGTH - Config.LABEL_PADDING * 2 + 1, text)
 					.attr({
 						"text-anchor": "middle",
-						"font-family": fontFamily
+						"font-family": Config.FONT_FAMILY
 					});
 				var mainTextBoundingBox = mainTextElement.getBBox();
 
 				mainBoxElement = this.rect(
-					mainTextBoundingBox.x - PADDING,
-					mainTextBoundingBox.y - PADDING + 1,
-					mainTextBoundingBox.width + PADDING * 2,
-					mainTextBoundingBox.height + PADDING * 2,
-					BORDER_RADIUS,
-					BORDER_RADIUS
+					mainTextBoundingBox.x - Config.LABEL_PADDING,
+					mainTextBoundingBox.y - Config.LABEL_PADDING + 1,
+					mainTextBoundingBox.width + Config.LABEL_PADDING * 2,
+					mainTextBoundingBox.height + Config.LABEL_PADDING * 2,
+					Config.LABEL_BORDER_RADIUS,
+					Config.LABEL_BORDER_RADIUS
 				);
 			}.bind(this);
 
 			var drawWithArrowOnLeft = function() {
 				arrowPoints.setPoint2(
-					x + ARROW_LENGTH,
-					y - ARROW_WIDTH / 2
+					x + Config.LABEL_ARROW_LENGTH,
+					y - Config.LABEL_ARROW_WIDTH / 2
 				);
 
 				arrowPoints.setPoint3(
-					x + ARROW_LENGTH,
-	                y + ARROW_WIDTH / 2
+					x + Config.LABEL_ARROW_LENGTH,
+	                y + Config.LABEL_ARROW_WIDTH / 2
 				);
 
-				mainTextElement = this.text(x + ARROW_LENGTH + PADDING - 1, y + FONT_SIZE / 2, text)
+				mainTextElement = this.text(x + Config.LABEL_ARROW_LENGTH + Config.LABEL_PADDING - 1, y + Config.LABEL_FONT_SIZE / 2, text)
 					.attr({
 						"text-anchor": "start",
-						"font-family": fontFamily
+						"font-family": Config.FONT_FAMILY
 					});
 				var mainTextBoundingBox = mainTextElement.getBBox();
 
-				secondaryTextElement = this.text(mainTextBoundingBox.x + mainTextBoundingBox.width + PADDING * 2, y + FONT_SIZE / 2, secondaryText)
+				secondaryTextElement = this.text(mainTextBoundingBox.x + mainTextBoundingBox.width + Config.LABEL_PADDING * 2, y + Config.LABEL_FONT_SIZE / 2, secondaryText)
 					.attr({
 						"text-anchor": "start",
-						"font-family": fontFamily
+						"font-family": Config.FONT_FAMILY
 					});
 				var secondaryTextBoundingBox = secondaryTextElement.getBBox();
 
 				mainBoxPoints = new BoxModel(
-					x + ARROW_LENGTH - 1,
-					mainTextBoundingBox.y + mainTextBoundingBox.height + PADDING,
-					mainTextBoundingBox.width + PADDING * 2,
-					mainTextBoundingBox.height + PADDING * 2,
+					x + Config.LABEL_ARROW_LENGTH - 1,
+					mainTextBoundingBox.y + mainTextBoundingBox.height + Config.LABEL_PADDING,
+					mainTextBoundingBox.width + Config.LABEL_PADDING * 2,
+					mainTextBoundingBox.height + Config.LABEL_PADDING * 2,
 					"left"
 				);
 
 				secondaryBoxPoints = new BoxModel(
-					x + ARROW_LENGTH + mainTextBoundingBox.width + PADDING * 2 - 1,
-					mainTextBoundingBox.y + mainTextBoundingBox.height + PADDING,
-					secondaryTextBoundingBox.width + PADDING * 2,
-					secondaryTextBoundingBox.height + PADDING * 2,
+					x + Config.LABEL_ARROW_LENGTH + mainTextBoundingBox.width + Config.LABEL_PADDING * 2 - 1,
+					mainTextBoundingBox.y + mainTextBoundingBox.height + Config.LABEL_PADDING,
+					secondaryTextBoundingBox.width + Config.LABEL_PADDING * 2,
+					secondaryTextBoundingBox.height + Config.LABEL_PADDING * 2,
 					"right"
 				);
 
@@ -178,42 +168,42 @@ function(Snap) {
 
 			var drawWithArrowOnRight = function() {
 				arrowPoints.setPoint2(
-	                x - ARROW_LENGTH,
-	                y - ARROW_WIDTH / 2
+	                x - Config.LABEL_ARROW_LENGTH,
+	                y - Config.LABEL_ARROW_WIDTH / 2
 	            );
 
 	            arrowPoints.setPoint3(
-	                x - ARROW_LENGTH,
-	                y + ARROW_WIDTH / 2
+	                x - Config.LABEL_ARROW_LENGTH,
+	                y + Config.LABEL_ARROW_WIDTH / 2
 	            );
 
-				secondaryTextElement = this.text(x - ARROW_LENGTH - PADDING, y + FONT_SIZE / 2, secondaryText)
+				secondaryTextElement = this.text(x - Config.LABEL_ARROW_LENGTH - Config.LABEL_PADDING, y + Config.LABEL_FONT_SIZE / 2, secondaryText)
 					.attr({
 						"text-anchor": "end",
-						"font-family": fontFamily
+						"font-family": Config.FONT_FAMILY
 					});
 				var secondaryTextBoundingBox = secondaryTextElement.getBBox();
 
-				mainTextElement = this.text(secondaryTextBoundingBox.x - PADDING * 2 + 1, y + FONT_SIZE / 2, text)
+				mainTextElement = this.text(secondaryTextBoundingBox.x - Config.LABEL_PADDING * 2 + 1, y + Config.LABEL_FONT_SIZE / 2, text)
 					.attr({
 						"text-anchor": "end",
-						"font-family": fontFamily
+						"font-family": Config.FONT_FAMILY
 					});
 				var mainTextBoundingBox = mainTextElement.getBBox();
 
 				secondaryBoxPoints = new BoxModel(
-					x + 1 - secondaryTextBoundingBox.width - ARROW_LENGTH - PADDING * 2,
-					mainTextBoundingBox.y + mainTextBoundingBox.height + PADDING,
-					secondaryTextBoundingBox.width + PADDING * 2,
-					secondaryTextBoundingBox.height + PADDING * 2,
+					x + 1 - secondaryTextBoundingBox.width - Config.LABEL_ARROW_LENGTH - Config.LABEL_PADDING * 2,
+					mainTextBoundingBox.y + mainTextBoundingBox.height + Config.LABEL_PADDING,
+					secondaryTextBoundingBox.width + Config.LABEL_PADDING * 2,
+					secondaryTextBoundingBox.height + Config.LABEL_PADDING * 2,
 					"right"
 				);
 
 				mainBoxPoints = new BoxModel(
-					x + 1 - ARROW_LENGTH - mainTextBoundingBox.width - PADDING * 2 - secondaryTextBoundingBox.width - PADDING * 2,
-					mainTextBoundingBox.y + mainTextBoundingBox.height + PADDING,
-					mainTextBoundingBox.width + PADDING * 2,
-					mainTextBoundingBox.height + PADDING * 2,
+					x + 1 - Config.LABEL_ARROW_LENGTH - mainTextBoundingBox.width - Config.LABEL_PADDING * 2 - secondaryTextBoundingBox.width - Config.LABEL_PADDING * 2,
+					mainTextBoundingBox.y + mainTextBoundingBox.height + Config.LABEL_PADDING,
+					mainTextBoundingBox.width + Config.LABEL_PADDING * 2,
+					mainTextBoundingBox.height + Config.LABEL_PADDING * 2,
 					"left"
 				);
 
@@ -222,41 +212,41 @@ function(Snap) {
 
 			var drawWithArrowOnBottomLeft = function() {
 				arrowPoints.setPoint2(
-					x + ARROW_WIDTH / 2,
-					y - ARROW_LENGTH
+					x + Config.LABEL_ARROW_WIDTH / 2,
+					y - Config.LABEL_ARROW_LENGTH
 				);
 
 				arrowPoints.setPoint3(
-					x - ARROW_WIDTH / 2,
-	                y - ARROW_LENGTH
+					x - Config.LABEL_ARROW_WIDTH / 2,
+	                y - Config.LABEL_ARROW_LENGTH
 				);
 
-				mainTextElement = this.text(x, y + 1 - ARROW_LENGTH - PADDING - FONT_SIZE / 2, text)
+				mainTextElement = this.text(x, y + 1 - Config.LABEL_ARROW_LENGTH - Config.LABEL_PADDING - Config.LABEL_FONT_SIZE / 2, text)
 					.attr({
 						"text-anchor": "middle",
-						"font-family": fontFamily
+						"font-family": Config.FONT_FAMILY
 					});
 				var mainTextBoundingBox = mainTextElement.getBBox();
 
-				secondaryTextElement = this.text(mainTextBoundingBox.x + mainTextBoundingBox.width + PADDING * 2, y + 1 - ARROW_LENGTH - PADDING - FONT_SIZE / 2, secondaryText)
+				secondaryTextElement = this.text(mainTextBoundingBox.x + mainTextBoundingBox.width + Config.LABEL_PADDING * 2, y + 1 - Config.LABEL_ARROW_LENGTH - Config.LABEL_PADDING - Config.LABEL_FONT_SIZE / 2, secondaryText)
 					.attr({
 						"text-anchor": "start",
-						"font-family": fontFamily
+						"font-family": Config.FONT_FAMILY
 					});
 				var secondaryTextBoundingBox = secondaryTextElement.getBBox();
 
 				mainBoxPoints = new BoxModel(
-					mainTextBoundingBox.x - PADDING,
-					y + 1 - ARROW_LENGTH,
-					mainTextBoundingBox.width + PADDING * 2,
-					mainTextBoundingBox.height + PADDING * 2,
+					mainTextBoundingBox.x - Config.LABEL_PADDING,
+					y + 1 - Config.LABEL_ARROW_LENGTH,
+					mainTextBoundingBox.width + Config.LABEL_PADDING * 2,
+					mainTextBoundingBox.height + Config.LABEL_PADDING * 2,
 					"left"
 				);
 				secondaryBoxPoints = new BoxModel(
-					secondaryTextBoundingBox.x - PADDING,
-					y + 1 - ARROW_LENGTH,
-					secondaryTextBoundingBox.width + PADDING * 2,
-					secondaryTextBoundingBox.height + PADDING * 2,
+					secondaryTextBoundingBox.x - Config.LABEL_PADDING,
+					y + 1 - Config.LABEL_ARROW_LENGTH,
+					secondaryTextBoundingBox.width + Config.LABEL_PADDING * 2,
+					secondaryTextBoundingBox.height + Config.LABEL_PADDING * 2,
 					"right"
 				);
 
@@ -265,41 +255,41 @@ function(Snap) {
 
 			var drawWithArrowOnBottomRight = function() {
 				arrowPoints.setPoint2(
-					x + ARROW_WIDTH / 2,
-					y - ARROW_LENGTH
+					x + Config.LABEL_ARROW_WIDTH / 2,
+					y - Config.LABEL_ARROW_LENGTH
 				);
 
 				arrowPoints.setPoint3(
-					x - ARROW_WIDTH / 2,
-	                y - ARROW_LENGTH
+					x - Config.LABEL_ARROW_WIDTH / 2,
+	                y - Config.LABEL_ARROW_LENGTH
 				);
 
-				secondaryTextElement = this.text(x, y + 1 - ARROW_LENGTH - PADDING - FONT_SIZE / 2, secondaryText)
+				secondaryTextElement = this.text(x, y + 1 - Config.LABEL_ARROW_LENGTH - Config.LABEL_PADDING - Config.LABEL_FONT_SIZE / 2, secondaryText)
 					.attr({
 						"text-anchor": "middle",
-						"font-family": fontFamily
+						"font-family": Config.FONT_FAMILY
 					});
 				var secondaryTextBoundingBox = secondaryTextElement.getBBox();
 
-				mainTextElement = this.text(secondaryTextBoundingBox.x - PADDING * 2, y + 1 - ARROW_LENGTH - PADDING - FONT_SIZE / 2, text)
+				mainTextElement = this.text(secondaryTextBoundingBox.x - Config.LABEL_PADDING * 2, y + 1 - Config.LABEL_ARROW_LENGTH - Config.LABEL_PADDING - Config.LABEL_FONT_SIZE / 2, text)
 					.attr({
 						"text-anchor": "end",
-						"font-family": fontFamily
+						"font-family": Config.FONT_FAMILY
 					});
 				var mainTextBoundingBox = mainTextElement.getBBox();
 
 				mainBoxPoints = new BoxModel(
-					mainTextBoundingBox.x - PADDING,
-					y + 1 - ARROW_LENGTH,
-					mainTextBoundingBox.width + PADDING * 2,
-					mainTextBoundingBox.height + PADDING * 2,
+					mainTextBoundingBox.x - Config.LABEL_PADDING,
+					y + 1 - Config.LABEL_ARROW_LENGTH,
+					mainTextBoundingBox.width + Config.LABEL_PADDING * 2,
+					mainTextBoundingBox.height + Config.LABEL_PADDING * 2,
 					"left"
 				);
 				secondaryBoxPoints = new BoxModel(
-					secondaryTextBoundingBox.x - PADDING,
-					y + 1 - ARROW_LENGTH,
-					secondaryTextBoundingBox.width + PADDING * 2,
-					secondaryTextBoundingBox.height + PADDING * 2,
+					secondaryTextBoundingBox.x - Config.LABEL_PADDING,
+					y + 1 - Config.LABEL_ARROW_LENGTH,
+					secondaryTextBoundingBox.width + Config.LABEL_PADDING * 2,
+					secondaryTextBoundingBox.height + Config.LABEL_PADDING * 2,
 					"right"
 				);
 
@@ -308,42 +298,42 @@ function(Snap) {
 
 			var drawWithArrowOnTopLeft = function() {
 				arrowPoints.setPoint2(
-					x + ARROW_WIDTH / 2,
-					y + ARROW_LENGTH
+					x + Config.LABEL_ARROW_WIDTH / 2,
+					y + Config.LABEL_ARROW_LENGTH
 				);
 
 				arrowPoints.setPoint3(
-					x - ARROW_WIDTH / 2,
-	                y + ARROW_LENGTH
+					x - Config.LABEL_ARROW_WIDTH / 2,
+	                y + Config.LABEL_ARROW_LENGTH
 				);
 
-				mainTextElement = this.text(x, y + ARROW_LENGTH + PADDING * 2 + FONT_SIZE / 2 - 1, text)
+				mainTextElement = this.text(x, y + Config.LABEL_ARROW_LENGTH + Config.LABEL_PADDING * 2 + Config.LABEL_FONT_SIZE / 2 - 1, text)
 					.attr({
 						"text-anchor": "middle",
-						"font-family": fontFamily
+						"font-family": Config.FONT_FAMILY
 					});
 				var mainTextBoundingBox = mainTextElement.getBBox();
 
 				mainBoxPoints = new BoxModel(
-					mainTextBoundingBox.x - PADDING,
-					y - 1 + mainTextBoundingBox.height + PADDING * 2 + ARROW_LENGTH,
-					mainTextBoundingBox.width + PADDING * 2,
-					mainTextBoundingBox.height + PADDING * 2,
+					mainTextBoundingBox.x - Config.LABEL_PADDING,
+					y - 1 + mainTextBoundingBox.height + Config.LABEL_PADDING * 2 + Config.LABEL_ARROW_LENGTH,
+					mainTextBoundingBox.width + Config.LABEL_PADDING * 2,
+					mainTextBoundingBox.height + Config.LABEL_PADDING * 2,
 					"left"
 				);
 
-				secondaryTextElement = this.text(mainTextBoundingBox.x + mainTextBoundingBox.width + PADDING * 2, y + ARROW_LENGTH + PADDING * 2 + FONT_SIZE / 2 - 1, secondaryText)
+				secondaryTextElement = this.text(mainTextBoundingBox.x + mainTextBoundingBox.width + Config.LABEL_PADDING * 2, y + Config.LABEL_ARROW_LENGTH + Config.LABEL_PADDING * 2 + Config.LABEL_FONT_SIZE / 2 - 1, secondaryText)
 					.attr({
 						"text-anchor": "start",
-						"font-family": fontFamily
+						"font-family": Config.FONT_FAMILY
 					});
 				var secondaryTextBoundingBox = secondaryTextElement.getBBox();
 
 				secondaryBoxPoints = new BoxModel(
-					mainTextBoundingBox.x + mainTextBoundingBox.width + PADDING,
-					y - 1 + mainTextBoundingBox.height + PADDING * 2 + FONT_SIZE,
-					secondaryTextBoundingBox.width + PADDING * 2,
-					secondaryTextBoundingBox.height + PADDING * 2,
+					mainTextBoundingBox.x + mainTextBoundingBox.width + Config.LABEL_PADDING,
+					y - 1 + mainTextBoundingBox.height + Config.LABEL_PADDING * 2 + Config.LABEL_FONT_SIZE,
+					secondaryTextBoundingBox.width + Config.LABEL_PADDING * 2,
+					secondaryTextBoundingBox.height + Config.LABEL_PADDING * 2,
 					"right"
 				);
 
@@ -352,41 +342,41 @@ function(Snap) {
 
 			var drawWithArrowOnTopRight = function() {
 				arrowPoints.setPoint2(
-					x + ARROW_WIDTH / 2,
-					y + ARROW_LENGTH
+					x + Config.LABEL_ARROW_WIDTH / 2,
+					y + Config.LABEL_ARROW_LENGTH
 				);
 
 				arrowPoints.setPoint3(
-					x - ARROW_WIDTH / 2,
-		            y + ARROW_LENGTH
+					x - Config.LABEL_ARROW_WIDTH / 2,
+		            y + Config.LABEL_ARROW_LENGTH
 				);
 
-				secondaryTextElement = this.text(x, y + ARROW_LENGTH + PADDING * 2 + FONT_SIZE / 2 - 1, secondaryText)
+				secondaryTextElement = this.text(x, y + Config.LABEL_ARROW_LENGTH + Config.LABEL_PADDING * 2 + Config.LABEL_FONT_SIZE / 2 - 1, secondaryText)
 					.attr({
 						"text-anchor": "middle",
-						"font-family": fontFamily
+						"font-family": Config.FONT_FAMILY
 					});
 				var secondaryTextBoundingBox = secondaryTextElement.getBBox();
 
-				mainTextElement = this.text(secondaryTextBoundingBox.x - PADDING * 2, y + ARROW_LENGTH + PADDING * 2 + FONT_SIZE / 2 - 1, text)
+				mainTextElement = this.text(secondaryTextBoundingBox.x - Config.LABEL_PADDING * 2, y + Config.LABEL_ARROW_LENGTH + Config.LABEL_PADDING * 2 + Config.LABEL_FONT_SIZE / 2 - 1, text)
 					.attr({
 						"text-anchor": "end",
-						"font-family": fontFamily
+						"font-family": Config.FONT_FAMILY
 					});
 				var mainTextBoundingBox = mainTextElement.getBBox();
 
 				mainBoxPoints = new BoxModel(
-					mainTextBoundingBox.x - PADDING,
-					y - 1 + mainTextBoundingBox.height + PADDING * 2 + ARROW_LENGTH,
-					mainTextBoundingBox.width + PADDING * 2,
-					mainTextBoundingBox.height + PADDING * 2,
+					mainTextBoundingBox.x - Config.LABEL_PADDING,
+					y - 1 + mainTextBoundingBox.height + Config.LABEL_PADDING * 2 + Config.LABEL_ARROW_LENGTH,
+					mainTextBoundingBox.width + Config.LABEL_PADDING * 2,
+					mainTextBoundingBox.height + Config.LABEL_PADDING * 2,
 					"left"
 				);
 				secondaryBoxPoints = new BoxModel(
-					secondaryTextBoundingBox.x - PADDING,
-					y - 1 + secondaryTextBoundingBox.height + PADDING * 2 + ARROW_LENGTH,
-					secondaryTextBoundingBox.width + PADDING * 2,
-					secondaryTextBoundingBox.height + PADDING * 2,
+					secondaryTextBoundingBox.x - Config.LABEL_PADDING,
+					y - 1 + secondaryTextBoundingBox.height + Config.LABEL_PADDING * 2 + Config.LABEL_ARROW_LENGTH,
+					secondaryTextBoundingBox.width + Config.LABEL_PADDING * 2,
+					secondaryTextBoundingBox.height + Config.LABEL_PADDING * 2,
 					"right"
 				);
 
@@ -436,7 +426,7 @@ function(Snap) {
 					y5: mainBoxPoints.topCurveEndY,
 					x6: mainBoxPoints.topInsideX,
 					y6: mainBoxPoints.topInsideY,
-					borderRadius: BORDER_RADIUS,
+					borderRadius: Config.LABEL_BORDER_RADIUS,
 					sweep: 1
 				})).attr({
 					stroke: 'white',
@@ -457,7 +447,7 @@ function(Snap) {
 					y5: secondaryBoxPoints.topCurveEndY,
 					x6: secondaryBoxPoints.topInsideX,
 					y6: secondaryBoxPoints.topInsideY,
-					borderRadius: BORDER_RADIUS,
+					borderRadius: Config.LABEL_BORDER_RADIUS,
 					sweep: 0
 				})).attr({
 					stroke: 'white',
