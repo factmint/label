@@ -383,7 +383,7 @@ function(Snap,   Config) {
 				boxToGroupWith = 'secondary';
 			}.bind(this);
 
-			if (typeof secondaryText === 'undefined') {
+			if (typeof secondaryText === 'undefined' || secondaryText === '') {
 				drawOverflowLabel();
 			} else {
 				switch (arrowPosition) {
