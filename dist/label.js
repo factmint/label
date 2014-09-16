@@ -77,7 +77,6 @@ function(Snap,   Config) {
 			var secondaryBoxExists = true;
 
 			var groupArrowWithBox = function(boxToGroupWith, mainBoxElement, arrowElement, secondaryBoxElement, mainTextElement, secondaryTextElement) {
-				console.log('grouping arrow with box');
 				if (boxToGroupWith === "main") {
 					var arrowBoxGroup = this.g(mainBoxElement, arrowElement);
 					arrowBoxGroup.addClass('fm-label-main');
